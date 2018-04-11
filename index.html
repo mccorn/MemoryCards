@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Memory Game</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="jquery-1.12.4.min.js"></script>
+    <script src="index.js" type="text/javascript" language="javascript"></script>
+</head>
+
+<body>
+    <div class="App" data-tid="App">
+        <div class="startscreen screen">
+            <div class="logo startlogo"></div>
+            <input type="submit" id="newstartsubmit" class="startsubmit newstartsubmit" value="start" data-tid="NewGame-startGame">
+        </div>
+        <div class="playscreen screen">
+            <div class="panel">
+                <div class="scoreblock playscoreblock">
+                    <label for="score" data-tid="Menu-scores">Score: </label>
+                    <br>
+                    <hr>
+                    <input type="text" value="0" id="score" class="score playscoretext" readonly>
+                </div>
+                <input type="submit" id="playrestart" class="startsubmit restartsubmit" value="restart" data-tid="Menu-newGame">
+            </div>
+            <div class="cardsflex" data-tid="Deck">
+<!--                Контейнер для карточной раскладки-->
+            </div>
+        </div>
+        <div class="finishscreen screen">
+            <div class="logo finallogo"></div>
+            <div class='message'>congratulations!</div>
+            <div class="panel finishpanel">
+                <div class="scoreblock finishscoreblock">
+                    <label for="score" data-tid="Menu-scores">Score: </label>
+                    <br>
+                    <hr>
+                    <input type="text" value="0" id="score" class="score finishscoretext" data-tid="Menu-scores" readonly>
+                    <input type="submit" id="playrestart" class="startsubmit finishrestartsubmit" value="restart" data-tid="EndGame-retryGame">
+                </div>       
+            </div>
+        </div>
+    </div>
+</body>  
+</html>

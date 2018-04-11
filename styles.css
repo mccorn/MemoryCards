@@ -1,0 +1,173 @@
+* {
+    padding: 0;
+    margin: 0
+}
+
+html {
+
+}
+
+body {
+
+}
+
+.screen {   
+    position: absolute;
+    min-width: 800px;
+    min-height: 400px;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    background: #1c6b2e;
+    color: white;
+}
+
+.startscreen {
+/*    display: none;*/
+    z-index: 100;
+}
+
+.playscreen {
+    text-align: center;
+}
+
+.startlogo {
+    width: 505px;
+    height: 260px;
+    margin: 100px auto;
+    background: url(img/logo/startLogo.png) center no-repeat;
+    
+}
+
+input[type="text"] {
+    background: none;
+    border: none;
+    color: white;
+    top: 400px;
+}
+
+
+
+input[type="submit"]:hover, a{
+    cursor: pointer;
+}
+
+.startsubmit {
+    position: relative;
+    display: block;
+    width: 200px;
+    height: 50px;
+    background: white;
+    border-radius: 15px;
+    color: #1c6b2e;
+    font-size: 25px;
+    margin: 0 auto;
+}
+
+.restartsubmit {
+    float: right;
+    margin: 20px 0;
+}
+
+.scoreblock {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    text-align: left;
+    width: 200px;
+    margin: 10px auto;
+}
+
+.playscoreblock {
+    float: left;
+}
+
+.score {
+    font-size: 70px;
+    display: block;
+}
+
+.panel {
+    overflow: hidden;
+    height: 100px;
+    width: 760px;
+    margin: auto;
+}
+
+.finishpanel {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    top: 370px;
+    left: calc(50% - 100px);
+}
+
+.cardsflex {
+    position: relative;
+    clear: both;
+    height: 500px;
+    width: 760px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+}
+
+.message {
+    text-align: center;
+    width: 100%;
+    display: block;
+    text-transform: uppercase;
+    font-size: 40px;
+}
+
+.finallogo {
+    height: 250px;
+    width: 500px;
+    margin: 80px auto 10px;
+    background-image: url(img/logo/finalLogo.png);
+    background-size: 500px 251px;
+    background-repeat: no-repeat;
+    background-position: top center;   
+    vertical-align: bottom;
+}
+
+.finishrestartsubmit {
+ 
+}
+
+.card {
+    display: block;
+    border-radius: 5px;
+    margin: 0 auto;
+    position: relative;
+    height: 160px;
+    width: 110px;
+    overflow: hidden;
+    transition: all .5s linear;
+}
+
+.frontcard,.backcard {
+    position: absolute;
+    height: 160px;
+    width: 110px;
+    background-size: cover;
+    background-position: center;
+    backface-visibility: hidden;
+    transition: all .7s linear;
+}
+
+.backcard {
+    background-image: url(img/Cards/back.png);
+}
+
+.closedcard .frontcard{
+  transform: rotateY(180deg);
+}
+.closedcard .backcard{
+  transform: rotateY(0deg);
+}
+.openedcard .backcard{
+  transform: rotateY(-180deg);
+}
+
