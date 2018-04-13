@@ -7,6 +7,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="jquery-1.12.4.min.js"></script>
     <script src="index.js" type="text/javascript" language="javascript"></script>
+    <script>
+        $(document).ready(function()   { 
+            $(document).on('click', '.startsubmit', function(){
+                //controller.startNewGame('lolol');
+                controller.startNewGame();
+            });  
+            
+            $(document).on('click', '.closedcard', function(){
+                controller.gameAction();
+            });
+        });
+    </script>
 </head>
 
 <body>
