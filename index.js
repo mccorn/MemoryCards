@@ -1,113 +1,143 @@
-var FULLCARDSSET = ["2C","2D","2H","2S","3C","3D","3H","3S","4C","4D","4H","4S","5C","5D","5H","5S","6C","6D","6H","6S","7C","7D","7H","7S","8C","8D","8H","8S","9C","9D","9H","9S","0C","0D","0H","0S","AC","AD","AH","AS","JC","JD","JH","JS","KC","KD","KH","KS","QC","QD","QH","QS"];
-var PAIRSCOUNT = 2;
+// Model:Состояние
+var model = {
+    FULLCARDSSET : ["2C","2D","2H","2S","3C","3D","3H","3S","4C","4D","4H","4S","5C","5D","5H","5S","6C","6D","6H","6S","7C","7D","7H","7S","8C","8D","8H","8S","9C","9D","9H","9S","0C","0D","0H","0S","AC","AD","AH","AS","JC","JD","JH","JS","KC","KD","KH","KS","QC","QD","QH","QS"],
+    PAIRSCOUNT : 9,
 
-
-var cardsset = [];
-var history = []; // История вскрытия карт
-var score = 0;
-var openedpairs = 0;
-
-var controller = {
-// С этой функцией вроде все в порядке
-    startNewGame: function(){
-//        alert('Game started');
-        showScreenByClass('.playscreen');
-        $(".cardsflex").empty();
-        cardsset = chooseCardsSet();
-        printCardsSet(cardsset);
-        score = 0;
-        history = [];
-        openedpairs = 0;
-        getScore(score);
-    }
-//    Если рас коментировать эту функцию,код упадет    
-//    gameAction: function(){
-//        if ($('.openedcard').length <= 1) {
-//            flipCard($(this));
-//        }
-//        history.push($(this).attr('data-tm'));
-//        if (!(history.length % 2)) {
-//            if (history[history.length - 1] != history[history.length - 2]) 
-//            {
-//                setTimeout( function(){
-//                    flipCard($(".openedcard"));
-//                },2000);   
-//                score -= openedpairs * 42;
-//                getScore(score);
-//            }
-//            else {
-//                setTimeout( function(){
-//                    $(".openedcard").empty();
-//                    $(".openedcard").removeClass('openedcard');
-//                    openedpairs++;
-//                    score += (PAIRSCOUNT - openedpairs)*42;
-//                    getScore(score);
-//                },2000);    
-//                if ( $('.closedcard').length == 2) {
-//                    openCardsSet();
-//                    openedpairs++;
-//                    score += (PAIRSCOUNT - openedpairs)*42;
-//                    getScore(score);
-//                    setTimeout( function(){
-//                        showScreenByClass('.finishscreen');
-//                    },2000);          
-//                }
-//            }
-//        }   
-//    }
-}
-
-function compareRandom(a, b) {
-      return Math.random() - 0.5;
-    }
-
-//            Состояние
-    function chooseCardsSet() {
+    cardsset : [],
+    score : 0,
+    openedpairs : 0,
+    history : [],
+    
+    init: function() {
+        model.cardsset = model.chooseCardsSet();
+        model.score = 0;
+        model.history=[];
+        model.openedpairs = 0;
+    },
+    
+    addlog: function(elem) {
+        model.history.push(elem);
+    },
+    
+    updateModel: function(boolkey) {
+        if (boolkey) {
+            model.openedpairs++;
+            model.score += (model.PAIRSCOUNT - model.openedpairs)*42;    
+        }   else {
+            model.score -= model.openedpairs * 42;
+        } 
+    },
+    
+    chooseCardsSet: function() {
         var arr = [];
-        arr = FULLCARDSSET.sort(compareRandom).slice(0,PAIRSCOUNT);
+        arr = model.FULLCARDSSET.sort(compareRandom).slice(0,model.PAIRSCOUNT);
         arr = arr.concat(arr);
         arr.sort(compareRandom);
         return arr;
     }
 
-//            Отображение
+};
 
-    function printCard(card) {
-        $('.cardsflex').append('<div class="closedcard card" data-tm = "' + card + '"><div class="frontcard" style="background-image: url(img/cards/' + card + '.png);" data-tid="Card"></div><div class="backcard" data-tid="Card-flipped"></div></div>');
-    }
 
-    function printCardsSet(cardsarray) {
-        for (var i=0; i < cardsarray.length; i++) {
-            printCard(cardsarray[i]);
+// Controller
+var controller = {
+   startNewGame: function(){
+        model.init();
+        viewer.init();
+    },
+    gameAction: function(somecard){
+        if ($('.openedcard').length <= 1) {
+            model.addlog($(somecard).data('tm'));
+            viewer.flipCard($(somecard));
         }
-        openCardsSet();
-        setTimeout(function() { 
-            closeCardsSet();
-        },5000);
+        if (!($('.openedcard').length % 2)) {
+            if (model.history[model.history.length - 1] != model.history[model.history.length - 2]) 
+            {
+                setTimeout( function(){
+                    viewer.flipCard($(".openedcard"));
+                },2000);   
+                model.updateModel(false);
+                viewer.getScore();
+            }
+            else {
+                setTimeout( function(){
+                    $(".openedcard").empty();
+                    $(".openedcard").removeClass('openedcard');
+                    model.updateModel(true);
+                    viewer.getScore();
+                },2000);    
+                if ( $('.closedcard').length == 2) {
+                    model.updateModel(true);
+                    viewer.openCardsSet();
+                    viewer.getScore();
+                    setTimeout( function(){
+                        viewer.showScreenByClass('.finishscreen');
+                    },2000);          
+                }
+            }
+        }   
+    },  
+    
+    restartGame: function() {
+        controller.startNewGame();
     }
+}
 
-    function closeCardsSet() {
+$(document).on('click', '.closedcard', function(){
+    controller.gameAction(this);
+});
+
+//  View: Отображение
+var viewer = {
+    init: function() {
+        $(".cardsflex").empty();
+        viewer.printCardsSet(model.cardsset);
+        viewer.showScreenByClass('.playscreen'); 
+        viewer.getScore();
+    },
+    
+    printCard: function(card) {
+        $('.cardsflex').append('<div class="closedcard card" data-tm = "' + card + '"><div class="frontcard" style="background-image: url(img/cards/' + card + '.png);" data-tid="Card"></div><div class="backcard" data-tid="Card-flipped"></div></div>');
+    },
+
+    printCardsSet: function(cardsarray) {
+        for (var i=0; i < cardsarray.length; i++) {
+            viewer.printCard(cardsarray[i]);
+        }
+        viewer.openCardsSet();
+        setTimeout(function() { 
+            viewer.closeCardsSet();
+        },5000);
+    },
+
+    closeCardsSet: function() {
         $(".card").addClass("closedcard");
         $(".card").removeClass("openedcard");
-    }
+    },
 
-    function openCardsSet() {
+    openCardsSet: function() {
         $(".card").removeClass("closedcard");
         $(".card").addClass("openedcard");
-    }
+    },
 
-    function getScore(num) {
-        $('.score').attr('value',num);
-    }
+    getScore: function() {
+        $('.score').attr('value',model.score);
+    },
 
-    function flipCard(card) {
+    flipCard: function(card) {
         $(card).toggleClass('closedcard');
         $(card).toggleClass("openedcard");
-    }
+    },
 
-    function showScreenByClass(screensclass) {
+    showScreenByClass: function(screensclass) {
         $('.screen').css('z-index',0);
         $(screensclass).css('z-index',100);
     }  
+}
 
+
+// Вспомогательные функции
+function compareRandom(a, b) {
+  return Math.random() - 0.5;
+}
     

@@ -3,21 +3,18 @@
     margin: 0
 }
 
-html {
-
-}
-
+html,
 body {
-
+    height: 100%;
 }
 
 .screen {   
     position: absolute;
     min-width: 800px;
-    min-height: 400px;
+    min-height: 700px;
     height: 100%;
     width: 100%;
-    overflow: hidden;
+    overflow: visible;
     background: #1c6b2e;
     color: white;
 }

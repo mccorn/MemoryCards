@@ -8,16 +8,7 @@
     <script src="jquery-1.12.4.min.js"></script>
     <script src="index.js" type="text/javascript" language="javascript"></script>
     <script>
-        $(document).ready(function()   { 
-            $(document).on('click', '.startsubmit', function(){
-                //controller.startNewGame('lolol');
-                controller.startNewGame();
-            });  
-            
-            $(document).on('click', '.closedcard', function(){
-                controller.gameAction();
-            });
-        });
+        
     </script>
 </head>
 
@@ -25,7 +16,7 @@
     <div class="App" data-tid="App">
         <div class="startscreen screen">
             <div class="logo startlogo"></div>
-            <input type="submit" id="newstartsubmit" class="startsubmit newstartsubmit" value="start" data-tid="NewGame-startGame">
+            <button id="newstartsubmit" class="startsubmit newstartsubmit" data-tid="NewGame-startGame" onclick="controller.startNewGame();">start</button>
         </div>
         <div class="playscreen screen">
             <div class="panel">
@@ -35,7 +26,7 @@
                     <hr>
                     <input type="text" value="0" id="score" class="score playscoretext" readonly>
                 </div>
-                <input type="submit" id="playrestart" class="startsubmit restartsubmit" value="restart" data-tid="Menu-newGame">
+                <button type="submit" id="playrestart" class="startsubmit restartsubmit" data-tid="Menu-newGame" onclick="controller.restartGame()">Restart</button>
             </div>
             <div class="cardsflex" data-tid="Deck">
 <!--                Контейнер для карточной раскладки-->
@@ -50,7 +41,7 @@
                     <br>
                     <hr>
                     <input type="text" value="0" id="score" class="score finishscoretext" data-tid="Menu-scores" readonly>
-                    <input type="submit" id="playrestart" class="startsubmit finishrestartsubmit" value="restart" data-tid="EndGame-retryGame">
+                    <button type="submit" id="playrestart" class="startsubmit finishrestartsubmit"  data-tid="EndGame-retryGame" onclick="controller.restartGame()">Restart</button>
                 </div>       
             </div>
         </div>
