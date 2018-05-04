@@ -45,37 +45,45 @@ var controller = {
         model.init();
         viewer.init();
     },
+    
+    //$('.openedcard').each(function (){ if ($(this).attr("data-tm")) { console.log($(this).attr("data-tm"))}})
     gameAction: function(somecard){
         if ($('.openedcard').length <= 1) {
             model.addlog($(somecard).data('tm'));
             viewer.flipCard($(somecard));
+            
         }
         if (!($('.openedcard').length % 2)) {
             if (model.history[model.history.length - 1] != model.history[model.history.length - 2]) 
             {
+                $('.card').prop("disabled", true);
                 setTimeout( function(){
                     viewer.flipCard($(".openedcard"));
-                },2000);   
-                model.updateModel(false);
-                viewer.getScore();
+                    model.updateModel(false);
+                    viewer.getScore();
+                },2000);           
             }
             else {
+                $('.card').prop("disabled", true);
                 setTimeout( function(){
                     $(".openedcard").empty();
                     $(".openedcard").removeClass('openedcard');
                     model.updateModel(true);
                     viewer.getScore();
-                },2000);    
+                },2000);  
                 if ( $('.closedcard').length == 2) {
                     model.updateModel(true);
                     viewer.openCardsSet();
-                    viewer.getScore();
+                    viewer.getScore(); 
                     setTimeout( function(){
-                        viewer.showScreenByClass('.finishscreen');
+                      viewer.showScreenByClass('.finishscreen');
                     },2000);          
                 }
             }
-        }   
+        } 
+        setTimeout( function(){
+            $('.card').prop("disabled", false);
+        },2000);         
     },  
     
     restartGame: function() {
