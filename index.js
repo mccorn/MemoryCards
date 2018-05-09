@@ -1,11 +1,10 @@
-var timerBig = 1000;
-var timerSmall = 2500;
+
 
 // Model:Состояние
 let model = {
     FULLCARDSSET : ["2C","2D","2H","2S","3C","3D","3H","3S","4C","4D","4H","4S","5C","5D","5H","5S","6C","6D","6H","6S","7C","7D","7H","7S","8C","8D","8H","8S","9C","9D","9H","9S","0C","0D","0H","0S","AC","AD","AH","AS","JC","JD","JH","JS","KC","KD","KH","KS","QC","QD","QH","QS"],
-    PAIRSCOUNT : 6,
-
+    PAIRSCOUNT : 9,
+    
     cardsset : [],
     score : 0,
     openedpairs : 0,
@@ -50,59 +49,58 @@ var controller = {
         viewer.init();
     },
 
-    gameAction: function(somecard){
-        model.activedcards++;
-        if ($('.openedcard').length <= 1) {
-            model.addlog($(somecard).data('tm'));
-//            console.log($(somecard).data('tm'));
-            viewer.flipCard($(somecard));
-            if ($('.openedcard').length === 2) {
-                if (model.history[model.history.length - 1] != model.history[model.history.length - 2]) 
-                {
-//                    $('.card').prop("disabled", true);
-                    setTimeout( function(){
-                        viewer.flipCard($(".openedcard"));
-                        model.updateModel(false);
-                        viewer.getScore();
-                    },timerSmall);           
-                }
-                else {
-//                    $('.card').prop("disabled", true);
-                    setTimeout( function(){
-                        $(".openedcard").empty();
-                        $(".openedcard").removeClass('openedcard');
-                        model.updateModel(true);
-                        viewer.getScore();
-                    },timerSmall);  
-                    if ( $('.closedcard').length == 2) {
-                        $('.restartsubmit').prop("disabled", true);
-                        model.updateModel(true);
-                        viewer.openCardsSet();
-                        viewer.getScore(); 
-                        setTimeout( function(){ 
-                            viewer.showScreenByClass('.finishscreen');
-                        },timerSmall);          
-                    }
+    gameAction: function(somecard){      
+        viewer.flipCard($(somecard));
+        model.addlog($(somecard).data('tm'));
+        if (model.activedcards === 2) {
+            if (model.history[model.history.length - 1] != model.history[model.history.length - 2]) 
+            {
+                setTimeout( function(){
+                    viewer.flipCard($(".openedcard"));
+                    model.updateModel(false);
+                    viewer.getScore();
+                    model.activedcards = 0;
+                }, viewer.TIMERSMALL);           
+            }
+            else {
+                setTimeout( function(){
+                    deleteOpenedCards();
+                    model.updateModel(true);
+                    viewer.getScore();
+                    model.activedcards = 0;
+                }, viewer.TIMERSMALL);  
+                if ( model.openedpairs == model.PAIRSCOUNT - 1) {
+                    $('.restartsubmit').prop("disabled", true);
+                    model.updateModel(true);
+                    viewer.openCardsSet();
+                    viewer.getScore(); 
+                    setTimeout( function(){ 
+                        viewer.showScreenByClass('.finishscreen');
+                    },viewer.TIMERSMALL);          
                 }
             } 
-        }
-        setTimeout( function(){
-            $('.card').prop("disabled", false);
-        },timerSmall);  
-        if (model.activedcards >= 2) model.activedcards = 0; //else model.activedcards--;
+        } 
     },  
     
     restartGame: function() {
         controller.startNewGame();
     }
 }
-
-$(document).on('click', '.closedcard', function(){
-    if (model.activedcards < 2) controller.gameAction(this);
+$(document).ready(function(){
+    $(document).on('click', '.closedcard', function(){
+        if (model.activedcards < 2) {
+            model.activedcards++;
+            controller.gameAction(this);
+        };
+    });
 });
+
 
 //  View: Отображение
 var viewer = {
+    const TIMERBIG = 2000;
+    const TIMERSMALL = 1500;
+    
     init: function() {
         $(".cardsflex").empty();
         viewer.printCardsSet(model.cardsset);
@@ -132,6 +130,11 @@ var viewer = {
     openCardsSet: function() {
         $(".card").removeClass("closedcard");
         $(".card").addClass("openedcard");
+    },
+    
+    deleteOpenedCards: function() {
+        $(".openedcard").empty();
+        $(".openedcard").removeClass('openedcard');
     },
 
     getScore: function() {

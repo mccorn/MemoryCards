@@ -148,13 +148,15 @@ input[type="submit"]:hover, a{
     
 }
 
+/*
 .closedcard {
-    transition: all .5s linear 0s;
+    transition: all 2.5s linear 0s;
 }
 
 .openedcard {
-    transition: all .5s linear 2s;
+    transition: all 2.5s linear 2s;
 }
+*/
 
 .frontcard,.backcard {
     position: absolute;
